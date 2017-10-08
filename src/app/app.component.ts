@@ -1,7 +1,19 @@
-import { Component } from "@angular/core";
+import {Component, OnInit} from "@angular/core";
+import {TechService} from "./services/tech.service";
+import {Tech} from "./tech";
 
 @Component({
-  selector: "my-app",
-  templateUrl: "./app.component.html",
+    selector: "my-app",
+    templateUrl: "./app.component.html",
 })
-export class AppComponent  { name = "Angular"; }
+export class AppComponent implements OnInit {
+    name = "Angular";
+    techs: Tech[];
+
+    constructor(private techService: TechService) {
+    }
+
+    ngOnInit(): void {
+        this.techs = this.techService.techList();
+    }
+}
