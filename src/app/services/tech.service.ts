@@ -1,21 +1,34 @@
 import {Injectable} from "@angular/core";
-// import {Http/*, Response*/} from "@angular/http";
+import {Http/*, Response*/} from "@angular/http";
 // import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 import {Tech} from "../tech";
+import "rxjs/add/operator/toPromise";
 
+/*
 const techs: Tech[] = [
-    new Tech(1, "name"),
+    new Tech(1, "title"),
     new Tech(2, "name2")
 ];
+*/
 
 @Injectable()
 export class TechService {
-    constructor(/*private http: Http*/) {
+    url = "http://192.168.0.103:8080";
+
+    constructor(private http: Http) {
     }
 
-    techList(): Tech[] {
-        return techs;
+    techList(): Promise<Tech[]> {
+        return this.http.get(this.url + "/techs")
+            .toPromise()
+            .then(response => response.json() as Tech[])
+            .catch(this.handleError);
+    }
+
+    private handleError(error: any): Promise<any> {
+        console.error("Error occured: " + error);
+        return Promise.reject(error.message || error);
     }
 }
