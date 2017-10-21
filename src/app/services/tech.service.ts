@@ -27,6 +27,13 @@ export class TechService {
             .catch(this.handleError);
     }
 
+    addTech(tech: Tech): Promise<Tech> {
+        return this.http.put(this.url + "/tech?title=" + tech.title, tech)
+            .toPromise()
+            .then(response => response.json() as Tech)
+            .catch(this.handleError);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error("Error occured: " + error);
         return Promise.reject(error.message || error);
