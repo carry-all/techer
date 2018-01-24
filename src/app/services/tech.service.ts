@@ -5,6 +5,7 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 import {Tech} from "../tech";
 import "rxjs/add/operator/toPromise";
+import {Observable} from "rxjs/Observable";
 
 /*
 const techs: Tech[] = [
@@ -20,11 +21,10 @@ export class TechService {
     constructor(private http: Http) {
     }
 
-    techList(): Promise<Tech[]> {
+    techList(): Observable<Tech[]> {
         return this.http.get(this.url + "/techs")
-            .toPromise()
-            .then(response => response.json() as Tech[])
-            .catch(this.handleError);
+            .map(response => response.json() as Tech[]).
+            .catch(err => Observable.throw(err.json().error || "Service error"));
     }
 
     addTech(tech: Tech): Promise<Tech> {
