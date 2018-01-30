@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Http/*, Response*/} from "@angular/http";
-// import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/catch";
 import {Tech} from "../tech";
@@ -20,11 +20,11 @@ export class TechService {
     constructor(private http: Http) {
     }
 
-    techList(): Promise<Tech[]> {
-        return this.http.get(this.url + "/techs")
-            .toPromise()
-            .then(response => response.json() as Tech[])
-            .catch(this.handleError);
+    techList(): Observable<Tech[]> {
+      return this.http.get(this.url + "/techs")
+        .map(response => response.json() as Tech[])
+        .catch(this.handleError); // todo: seems strange, what should I return instead of a Promise?
+      // todo: need to store observeable here + put code to clean on unsubscribe
     }
 
     addTech(tech: Tech): Promise<Tech> {
